@@ -1,10 +1,11 @@
-import { getNotes } from '@/lib/notes'
+"use client"
+import { useNotes } from '../context/NotesContext'
 import Link from 'next/link'
 import React from 'react'
 import NoteCard from '../components/NoteCard'
 
 export default function page() {
-  const notes = getNotes()
+  const {notes} = useNotes()
   // funcion fetch notas => me trae un array de notas [{id: 1, title: "Nota 1", content: "Contenido de la nota 1"}, {id: 2, title: "Nota 2", content: "Contenido de la nota 2"}]
 
   return (

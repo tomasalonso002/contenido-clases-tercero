@@ -1,7 +1,19 @@
+"use client"
+
 import Link from "next/link";
+import { useState } from "react";
+import ChatModal from "./ChatModal";
+import { SignInButton, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
+
 
 export default function Navbar() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+    const {isLoaded, isSignedIn} = useAuth()
+
   return (
+    <>
     <nav className="sticky top-0 z-50 backdrop-blur-xs bg-zinc-900/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
@@ -29,6 +41,13 @@ export default function Navbar() {
                 <Link href="/about" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
                   About
                 </Link>
+
+                <button
+                className="bg-purple-600/30 rounded px-3 py-2 text-sm font-medium border text-purple-300 border-purple-500/30 cursor-pointer hover:bg-purple-600 hover:text-white"
+                onClick={()=> setIsChatOpen(true)}
+                >
+                iTec IA
+                </button>
               </div>
             </div>
           </div>
@@ -41,19 +60,24 @@ export default function Navbar() {
               </svg>
             </button>
 
-            <el-dropdown className="relative ml-3">
-              <Link href={"/profile"} className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                <span className="absolute -inset-1.5"></span>
-                <span className="sr-only">Open user menu</span>
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
-              </Link>
 
-              <el-menu anchor="bottom end" popover className="w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-                <a href="#" className="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:outline-hidden">Your profile</a>
-                <a href="#" className="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:outline-hidden">Settings</a>
-                <a href="#" className="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:outline-hidden">Sign out</a>
-              </el-menu>
-            </el-dropdown>
+
+            {isLoaded && !isSignedIn &&(
+              <SignInButton>
+              <button className="bg-blue-600/30 rounded px-3 py-2 text-sm font-medium border text-blue-300 border-blue-500/30 cursor-pointer hover:bg-blue-600 hover:text-white">
+                Iniciar Sesion
+              </button>
+            </SignInButton>
+            )}
+
+            {
+              isLoaded && isSignedIn &&(
+                <UserButton></UserButton>
+              )
+            }
+
+
+
           </div>
         </div>
       </div>
@@ -67,5 +91,13 @@ export default function Navbar() {
         </div>
       </el-disclosure>
     </nav>
+
+    <ChatModal
+      isOpen={isChatOpen}
+      onClose={() => setIsChatOpen(false)}  
+    />
+    
+    
+    </>
   )
 }

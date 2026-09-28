@@ -1,17 +1,26 @@
+"use client";
 import Aside from "@/app/components/Aside"
-import { getCategories } from "@/lib/notes"
+import { useNotes, NotesProvider } from "../context/NotesContext"
+
+function LayoutContext({ children }){
+    const { getDynamicCategories } = useNotes()
+    const categorias = getDynamicCategories()
+    
+    return (
+      <div className="flex min-h-screen bg-zinc-900">
+        <Aside data={categorias} />
+        {children}
+      </div>
+    )
+}
 
 export default function NotasLayout({ children }) {
-
-  const categorias = getCategories()
-
-  return (
-    <div className="flex min-h-screen bg-zinc-900">
-
-      <Aside data={categorias} />
-
-      {children}
-
-    </div>
+  return(
+    <NotesProvider>
+      <LayoutContext>
+        { children }
+      </LayoutContext>
+    </NotesProvider>
   )
 }
+

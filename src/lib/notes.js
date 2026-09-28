@@ -129,15 +129,28 @@ const arr2 = [...arr1, 4] // [1, 2, 3, 4]
     `
   },
 ]
-
+// Devuelve todas las notas del array "notes"
 export const getNotes = () => notes
 
+
+// Busca UNA nota por id
+// find() recorre el array hasta encontrar la primera coincidencia
 export const getNoteById = (id) =>
   notes.find((note) => note.id === id)
 
+
+// Devuelve las categorías junto con sus notas
 export const getCategories = () => {
   return categories.map((category) => ({
+    
+    // Copia todas las propiedades de la categoría
+    // Ej: id, title, etc.
     ...category, // spread operator
-    notes: notes.filter((note) => note.category_id == category.id)
+
+    // Agrega una nueva propiedad llamada "notes"
+    // con las notas que pertenecen a esa categoría
+    notes: notes.filter(
+      (note) => note.category_id == category.id
+    )
   }))
 }
